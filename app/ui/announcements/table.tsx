@@ -11,6 +11,7 @@ export default async function AnnouncementsTable({
   currentPage: number;
 }) {
   const announcements = await fetchFilteredAnnouncements(query, currentPage);
+  const defaultImageUrl = 'https://live.staticflickr.com/65535/53774384752_8f4b46c648_c.jpg'; // Replace with your default image path
 
   return (
     <div className="mt-6 flow-root">
@@ -24,9 +25,10 @@ export default async function AnnouncementsTable({
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
+                    {announcement.image_url}
                     <div className="mb-2 flex items-center">
                       <Image
-                        src={announcement.image_url}
+                        src={announcement.image_url || defaultImageUrl}
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
@@ -83,13 +85,13 @@ export default async function AnnouncementsTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
-                        src={announcement.image_url}
+                        src={announcement.image_url || defaultImageUrl}
                         className="rounded-full"
                         width={28}
                         height={28}
                         alt={`${announcement.name}'s profile picture`}
                       />
-                      <p>{announcement.name}</p>
+                      <p className="truncate">{announcement.name}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
