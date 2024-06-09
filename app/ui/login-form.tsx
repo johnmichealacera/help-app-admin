@@ -108,10 +108,12 @@ export default function LoginForm() {
             </div>
 
           </div>
-          <LoginButton />
-          <Button className="mt-4 w-50 bg-green-500" type="button" onClick={openModal}>
-              Create New Account<PlusIcon className="ml-auto h-5 w-5 text-gray-50" />
+          <div className="flex flex-col">
+            <LoginButton />
+            <Button className="mt-4 w-24 bg-green-500 hover:bg-green-400 justify-self-end self-end" type="button" onClick={openModal}>
+              Create Account<PlusIcon className="h-5 w-5 text-gray-50 text-sm" />
             </Button>
+          </div>
           <div
             className="flex h-8 items-end space-x-1"
             aria-live="polite"
@@ -123,9 +125,6 @@ export default function LoginForm() {
                 <p className="text-sm text-red-500">{errorMessage}</p>
               </>
             )}
-          </div>
-          <div className="flex h-8 items-end space-x-1">
-            {/* Add form errors here */}
           </div>
         </div>
       </form>
