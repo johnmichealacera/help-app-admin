@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { UpdateAnnouncement, DeleteAnnouncement } from '@/app/ui/announcements/buttons';
 import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredAnnouncements } from '@/app/lib/data';
+import { getUserdata } from '@/auth';
 
 export default async function AnnouncementsTable({
   query,
@@ -10,7 +11,8 @@ export default async function AnnouncementsTable({
   query: string;
   currentPage: number;
 }) {
-  const announcements = await fetchFilteredAnnouncements(query, currentPage);
+  const userData: any = await getUserdata();
+  const announcements = await fetchFilteredAnnouncements(userData?.department, query, currentPage);
   const defaultImageUrl = 'https://live.staticflickr.com/65535/53774384752_8f4b46c648_c.jpg'; // Replace with your default image path
 
   return (

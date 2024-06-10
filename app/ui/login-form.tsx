@@ -102,6 +102,8 @@ export default function LoginForm() {
                   <option value="police">Police</option>
                   <option value="hospital">Hospital</option>
                   <option value="fire">Fire</option>
+                  <option value="MDRRMO">MDRRMO</option>
+                  <option value="PCG">PCG</option>
                 </select>
                 <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>

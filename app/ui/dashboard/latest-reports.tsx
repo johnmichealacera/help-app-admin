@@ -2,8 +2,8 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchLatestReports } from '@/app/lib/data';
-export default async function LatestReports() {
-  const latestReports = await fetchLatestReports();
+export default async function LatestReports({userData}: {userData: any}) {
+  const latestReports = await fetchLatestReports(userData?.department);
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>

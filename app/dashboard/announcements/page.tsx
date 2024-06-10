@@ -7,6 +7,7 @@ import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchAnnouncementsPages } from '@/app/lib/data';
 import { Metadata } from 'next';
+import { getUserdata } from '@/auth';
  
 export const metadata: Metadata = {
   title: 'Announcements',
@@ -20,9 +21,10 @@ export default async function Page({
     page: number
   }
 }) {
+  const userData: any = await getUserdata();
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchAnnouncementsPages(query);
+  const totalPages = await fetchAnnouncementsPages(userData?.department, query);
 
   return (
     <div className="w-full">

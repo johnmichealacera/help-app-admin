@@ -6,6 +6,7 @@ import { sql } from '@vercel/postgres';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 import {auth as auth1} from '@/auth';
+import { unstable_noStore as noStore } from 'next/cache';
  
 async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -18,6 +19,8 @@ async function getUser(email: string): Promise<User | undefined> {
 }
 
 export async function getUserdata() {
+  noStore();
+
   const session = await auth1();
   if (session?.user?.email) {
     const userdata = await getUser(session?.user?.email);
@@ -32,7 +35,7 @@ export const { auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6), department: z.string().min(4) })
+          .object({ email: z.string().email(), password: z.string().min(6), department: z.string() })
           .safeParse(credentials);
         if (parsedCredentials.success) {
           const { email, password, department } = parsedCredentials.data;

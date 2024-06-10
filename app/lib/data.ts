@@ -18,13 +18,13 @@ export async function fetchRevenue() {
   }
 }
 
-export async function fetchCardData() {
+export async function fetchCardData(department: string) {
   noStore();
   try {
-    const resolvedReportsCountPromise = sql`SELECT COUNT(*) FROM reports where reports.status = 'resolved'`;
-    const pendingReportsCountPromise = sql`SELECT COUNT(*) FROM reports where reports.status = 'pending'`;
-    const reportsCountPromise = sql`SELECT COUNT(*) FROM reports`;
-    const personnelCountPromise = sql`SELECT COUNT(*) FROM users`;
+    const resolvedReportsCountPromise = sql`SELECT COUNT(*) FROM reports where reports.status = 'resolved' AND reports.department = ${department}`;
+    const pendingReportsCountPromise = sql`SELECT COUNT(*) FROM reports where reports.status = 'pending' AND reports.department = ${department}`;
+    const reportsCountPromise = sql`SELECT COUNT(*) FROM reports WHERE reports.department = ${department}`;
+    const personnelCountPromise = sql`SELECT COUNT(*) FROM users WHERE users.department = ${department}`;
     const data = await Promise.all([
       resolvedReportsCountPromise,
       pendingReportsCountPromise,
@@ -64,6 +64,7 @@ export async function getUser(email: string) {
 }
 
 export async function fetchFilteredAnnouncements(
+  department: string,
   query: string,
   currentPage: number,
 ) {
@@ -84,11 +85,12 @@ export async function fetchFilteredAnnouncements(
       FROM announcements
       JOIN users ON announcements.personnel_id = users.id
       WHERE
-        users.name ILIKE ${`%${query}%`} OR
+        users.department = ${department} AND
+        (users.name ILIKE ${`%${query}%`} OR
         users.email ILIKE ${`%${query}%`} OR
         users.department ILIKE ${`%${query}%`} OR
         announcements.subject ILIKE ${`%${query}%`} OR
-        announcements.description ILIKE ${`%${query}%`}
+        announcements.description ILIKE ${`%${query}%`})
       ORDER BY announcements.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
@@ -124,17 +126,18 @@ export async function fetchAnnouncementById(id: string) {
   }
 }
 
-export async function fetchAnnouncementsPages(query: string) {
+export async function fetchAnnouncementsPages(department: string, query: string) {
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)
     FROM announcements
     JOIN users ON announcements.personnel_id = users.id
     WHERE
-      users.name ILIKE ${`%${query}%`} OR
+      users.department = ${department} AND
+      (users.name ILIKE ${`%${query}%`} OR
       users.email ILIKE ${`%${query}%`} OR
       announcements.subject ILIKE ${`%${query}%`} OR
-      announcements.description ILIKE ${`%${query}%`}
+      announcements.description ILIKE ${`%${query}%`})
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -145,7 +148,7 @@ export async function fetchAnnouncementsPages(query: string) {
   }
 }
 
-export async function fetchFilteredReports(query: string, 
+export async function fetchFilteredReports(department: string, query: string, 
   currentPage: number) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -161,11 +164,12 @@ export async function fetchFilteredReports(query: string,
 		  reports.date
 		FROM reports
 		WHERE
-      reports.name ILIKE ${`%${query}%`} OR
+      reports.department = ${department} AND
+      (reports.name ILIKE ${`%${query}%`} OR
       reports.contact_number ILIKE ${`%${query}%`} OR
       reports.description ILIKE ${`%${query}%`} OR
       reports.status ILIKE ${`%${query}%`} OR
-      reports.department ILIKE ${`%${query}%`}
+      reports.department ILIKE ${`%${query}%`})
 		ORDER BY reports.date DESC
     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
 	  `;
@@ -177,16 +181,16 @@ export async function fetchFilteredReports(query: string,
   }
 }
 
-export async function fetchReportsPages(query: string) {
+export async function fetchReportsPages(department: string, query: string) {
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)
     FROM reports
     WHERE
-      reports.name ILIKE ${`%${query}%`} OR
+      reports.department = ${department} AND
+      (reports.name ILIKE ${`%${query}%`} OR
       reports.contact_number ILIKE ${`%${query}%`} OR
-      reports.description ILIKE ${`%${query}%`} OR
-      reports.department ILIKE ${`%${query}%`}
+      reports.description ILIKE ${`%${query}%`})
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -223,12 +227,13 @@ export async function fetchReportById(id: string) {
   }
 }
 
-export async function fetchLatestReports() {
+export async function fetchLatestReports(department: string) {
   noStore();
   try {
     const data = await sql`
       SELECT reports.id, reports.name, reports.contact_number, reports.department, reports.description, reports.status
       FROM reports
+      WHERE reports.department = ${department}
       ORDER BY reports.date DESC
       LIMIT 5`;
     const latestReports = data.rows.map((report) => ({

@@ -16,33 +16,6 @@ export default async function HelpAppLogo() {
         className="h-12 w-12 md:h-16 md:w-16"
         alt="Socorro logo"
       />
-      {userdata?.department === 'hospital' && (
-        <Image
-          src="/hospital.png"
-          width={50}
-          height={50}
-          className="h-12 w-12 md:h-16 md:w-16"
-          alt="Hospital logo"
-        />
-      )}
-      {userdata?.department === 'police' && (
-        <Image
-          src="/police.png"
-          width={50}
-          height={50}
-          className="h-12 w-12 md:h-16 md:w-16"
-          alt="Police logo"
-        />
-      )}
-      {userdata?.department === 'fire' && (
-        <Image
-          src="/fire.png"
-          width={50}
-          height={50}
-          className="h-12 w-12 md:h-16 md:w-16"
-          alt="Fire logo"
-        />
-      )}
       <p className="text-[32px]">Socorro Help App</p>
     </div>
   );

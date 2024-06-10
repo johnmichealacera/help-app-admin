@@ -14,8 +14,8 @@ const iconMap = {
   reports: InboxIcon,
 };
 
-export default async function CardWrapper() {
-  const { totalResolvedReports, totalPendingReports, totalReports, totalPersonnels } = await fetchCardData();
+export default async function CardWrapper({userData}: {userData: any}) {
+  const { totalResolvedReports, totalPendingReports, totalReports, totalPersonnels } = await fetchCardData(userData?.department);
   return (
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}

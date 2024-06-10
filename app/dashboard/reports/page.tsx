@@ -5,6 +5,7 @@ import Pagination from '@/app/ui/pagination';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
+import { getUserdata } from '@/auth';
  
 export const metadata: Metadata = {
   title: 'Reports',
@@ -20,8 +21,9 @@ export default async function Page({
 }) {
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchReportsPages(query);
-  const reports: any = await fetchFilteredReports(query, currentPage);
+  const userData: any = await getUserdata();
+  const totalPages = await fetchReportsPages(userData?.department, query);
+  const reports: any = await fetchFilteredReports(userData?.department, query, currentPage);
 
   return (
     <div className="w-full">

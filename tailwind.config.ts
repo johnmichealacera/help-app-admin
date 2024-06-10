@@ -18,6 +18,14 @@ const config: Config = {
           600: '#2F6FEB',
         },
       },
+      backgroundImage: {
+        'help-app-background-fire': "url('/fire.png')",
+        'help-app-background-police': "url('/police.png')",
+        'help-app-background-hospital': "url('/hospital.png')",
+        'help-app-background-mdrrmo': "url('/mdrrmo.png')",
+        'help-app-background-pcg': "url('/pcg.png')",
+        'help-app-background-default': "url('/profile-fallback.png')",
+      }
     },
     keyframes: {
       shimmer: {
