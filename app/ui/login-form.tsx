@@ -17,19 +17,58 @@ import { useState } from 'react';
 export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    clearForm();
-    setIsModalOpen(true);
-  }
-  const closeModal = () => setIsModalOpen(false);
+  const [adminError, setAdminError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [department, setDepartment] = useState('');
+
   const clearForm = () => {
     setEmail('');
     setPassword('');
     setDepartment('');
+    setAdminError('');
   };
+
+  const validateAdminCredentials = async () => {
+    try {
+      const response = await fetch('/api/check-admin-credentials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (response?.status === 401) {
+        setAdminError('Credentials Unauthorized.');
+        return false;
+      }
+      if (!response.ok) {
+        setAdminError('Invalid administrator credentials.');
+        return false;
+      }
+      const result = await response.json();
+      
+      if (result.isAdmin) {
+        return true;
+      } else {
+        setAdminError('Invalid administrator credentials.');
+        return false;
+      }
+    } catch (error) {
+      setAdminError('Error checking administrator credentials.');
+      return false;
+    }
+  };
+
+  const openModal = async () => {
+    if (await validateAdminCredentials()) {
+      clearForm();
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -108,11 +147,14 @@ export default function LoginForm() {
                 <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>
             </div>
-
           </div>
           <div className="flex flex-col">
             <LoginButton />
-            <Button className="mt-4 w-24 bg-green-500 hover:bg-green-400 justify-self-end self-end" type="button" onClick={openModal}>
+            <Button
+              className="mt-4 w-24 bg-green-500 hover:bg-green-400 justify-self-end self-end"
+              type="button"
+              onClick={openModal}
+            >
               Create Account<PlusIcon className="h-5 w-5 text-gray-50 text-sm" />
             </Button>
           </div>
@@ -127,10 +169,16 @@ export default function LoginForm() {
                 <p className="text-sm text-red-500">{errorMessage}</p>
               </>
             )}
+            {adminError && (
+              <>
+                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                <p className="text-sm text-red-500">{adminError}</p>
+              </>
+            )}
           </div>
         </div>
       </form>
-      <SignUpModal isOpen={isModalOpen} onClose={closeModal}/>
+      <SignUpModal isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
 }
