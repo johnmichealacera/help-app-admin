@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { createUser } from '../lib/actions';
 
 export function SignUpModal({ isOpen, onClose }: {isOpen: boolean, onClose: any}) {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -20,7 +21,7 @@ export function SignUpModal({ isOpen, onClose }: {isOpen: boolean, onClose: any}
     }
     setPasswordsMatch(true);
     try {
-      await createUser(name, email, password, department);
+      await createUser(firstName, lastName, email, password, department);
       alert("User successfully created");
     } catch (e: any) {
       console.error('e', e);
@@ -30,11 +31,11 @@ export function SignUpModal({ isOpen, onClose }: {isOpen: boolean, onClose: any}
   };
 
   const clearAndClose = () => {
-    setName('');
+    setFirstName('');
+    setLastName('');
     setEmail('');
     setPassword('');
     setConfirmPassword('');
-    setName('');
     setDepartment('');
     setPasswordsMatch(true);
     onClose();
@@ -59,14 +60,27 @@ export function SignUpModal({ isOpen, onClose }: {isOpen: boolean, onClose: any}
                   </h3>
                   <div className="mt-2">
                     <div className="mb-4">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
                       <input
                         type="text"
-                        name="name"
-                        id="name"
-                        autoComplete="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        name="firstName"
+                        id="firstName"
+                        autoComplete="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                        className="mt-1 p-1 border border-gray-300 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        autoComplete="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         required
                         className="mt-1 p-1 border border-gray-300 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                       />

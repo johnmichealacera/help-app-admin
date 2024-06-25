@@ -147,7 +147,7 @@ export default function ViewReportForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Report</Button>
+        <Button type="submit">Submit</Button>
       </div>
     </form>
   );

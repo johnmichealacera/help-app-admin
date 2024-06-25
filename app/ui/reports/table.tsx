@@ -43,7 +43,7 @@ export default async function ReportsTable({
                         <p className="font-medium">{report.description}</p>
                       </div>
                     </div>
-                    <div className="pt-4 text-sm">
+                    <div className="pt-4 text-sm font-bold bg-gray-200 border-2 border-black text-gray-900">
                       <p>{formatDateToLocal(report.date)}</p>
                     </div>
                   </div>
@@ -93,7 +93,7 @@ export default async function ReportsTable({
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         <ReportStatus status={report.status} />
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md font-bold bg-gray-200 border-2 border-black text-gray-900">
                         {formatDateToLocal(report.date)}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">

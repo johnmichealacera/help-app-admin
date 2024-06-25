@@ -78,7 +78,7 @@ export async function fetchFilteredAnnouncements(
         announcements.subject,
         announcements.description,
         announcements.date,
-        users.name,
+        users.firstName,
         users.email,
         users.department,
         users.image_url
@@ -86,7 +86,7 @@ export async function fetchFilteredAnnouncements(
       JOIN users ON announcements.personnel_id = users.id
       WHERE
         users.department = ${department} AND
-        (users.name ILIKE ${`%${query}%`} OR
+        (users.firstName ILIKE ${`%${query}%`} OR
         users.email ILIKE ${`%${query}%`} OR
         users.department ILIKE ${`%${query}%`} OR
         announcements.subject ILIKE ${`%${query}%`} OR
@@ -134,7 +134,7 @@ export async function fetchAnnouncementsPages(department: string, query: string)
     JOIN users ON announcements.personnel_id = users.id
     WHERE
       users.department = ${department} AND
-      (users.name ILIKE ${`%${query}%`} OR
+      (users.firstName ILIKE ${`%${query}%`} OR
       users.email ILIKE ${`%${query}%`} OR
       announcements.subject ILIKE ${`%${query}%`} OR
       announcements.description ILIKE ${`%${query}%`})

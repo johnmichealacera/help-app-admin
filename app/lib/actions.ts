@@ -147,7 +147,7 @@ export async function authenticate(
   }
 }
 
-export async function createUser(name: string, email:string, password: string, department: string) {
+export async function createUser(firstName: string, lastName: string, email:string, password: string, department: string) {
   const userdata: any = await getUserdata();
   if (userdata?.email === email) {
     return {
@@ -158,8 +158,8 @@ export async function createUser(name: string, email:string, password: string, d
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await sql`
-      INSERT INTO users (name, email, password, department)
-      VALUES (${name}, ${email}, ${hashedPassword}, ${department})
+      INSERT INTO users (firstname, lastname, email, password, department)
+      VALUES (${firstName}, ${lastName}, ${email}, ${hashedPassword}, ${department})
     `;
 
   } catch(error) {

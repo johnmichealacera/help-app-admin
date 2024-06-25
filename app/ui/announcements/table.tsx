@@ -34,9 +34,9 @@ export default async function AnnouncementsTable({
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
-                        alt={`${announcement.name}'s profile picture`}
+                        alt={`${announcement.firstname}'s profile picture`}
                       />
-                      <p>{announcement.name}</p>
+                      <p>{announcement.firstname}</p>
                     </div>
                     <p className="text-sm text-gray-500">{announcement.department}</p>
                   </div>
@@ -91,9 +91,9 @@ export default async function AnnouncementsTable({
                         className="rounded-full"
                         width={28}
                         height={28}
-                        alt={`${announcement.name}'s profile picture`}
+                        alt={`${announcement.firstname}'s profile picture`}
                       />
-                      <p className="truncate">{announcement.name}</p>
+                      <p className="truncate">{announcement.firstname}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
