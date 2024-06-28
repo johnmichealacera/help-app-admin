@@ -149,7 +149,7 @@ export async function fetchAnnouncementsPages(department: string, query: string)
 }
 
 export async function fetchFilteredReports(department: string, query: string, 
-  currentPage: number) {
+  currentPage: number, reportStatus: string) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   try {
@@ -159,16 +159,20 @@ export async function fetchFilteredReports(department: string, query: string,
 		  reports.name,
 		  reports.contact_number,
 		  reports.department,
-		  reports.description,
+		  reports.what,
+		  reports.when,
+		  reports.where,
 		  reports.status,
 		  reports.date
 		FROM reports
 		WHERE
       reports.department = ${department} AND
+      reports.status = ${reportStatus} AND
       (reports.name ILIKE ${`%${query}%`} OR
       reports.contact_number ILIKE ${`%${query}%`} OR
-      reports.description ILIKE ${`%${query}%`} OR
-      reports.status ILIKE ${`%${query}%`} OR
+      reports.what ILIKE ${`%${query}%`} OR
+      reports.when ILIKE ${`%${query}%`} OR
+      reports.where ILIKE ${`%${query}%`} OR
       reports.department ILIKE ${`%${query}%`})
 		ORDER BY reports.date DESC
     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
@@ -181,16 +185,19 @@ export async function fetchFilteredReports(department: string, query: string,
   }
 }
 
-export async function fetchReportsPages(department: string, query: string) {
+export async function fetchReportsPages(department: string, query: string, reportStatus: string) {
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)
     FROM reports
     WHERE
       reports.department = ${department} AND
+      reports.status = ${reportStatus} AND
       (reports.name ILIKE ${`%${query}%`} OR
       reports.contact_number ILIKE ${`%${query}%`} OR
-      reports.description ILIKE ${`%${query}%`})
+      reports.what ILIKE ${`%${query}%`} OR
+      reports.when ILIKE ${`%${query}%`} OR
+      reports.where ILIKE ${`%${query}%`})
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -210,7 +217,9 @@ export async function fetchReportById(id: string) {
         reports.name,
         reports.contact_number,
         reports.department,
-        reports.description,
+        reports.what,
+        reports.where,
+        reports.when,
         reports.status
       FROM reports
       WHERE reports.id = ${id};
@@ -231,7 +240,7 @@ export async function fetchLatestReports(department: string) {
   noStore();
   try {
     const data = await sql`
-      SELECT reports.id, reports.name, reports.contact_number, reports.department, reports.description, reports.status
+      SELECT reports.id, reports.name, reports.contact_number, reports.department, reports.what, reports.where, reports.when, reports.status
       FROM reports
       WHERE reports.department = ${department}
       ORDER BY reports.date DESC

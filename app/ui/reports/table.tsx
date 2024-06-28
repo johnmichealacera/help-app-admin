@@ -1,16 +1,57 @@
+"use client"
+
 import Search from '@/app/ui/search';
 import { ViewReport } from './buttons';
 import { formatDateToLocal } from '@/app/lib/utils';
 import ReportStatus from '../announcements/status';
+import { useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export default async function ReportsTable({
+export default function ReportsTable({
   reports,
 }: {
   reports: any[];
 }) {
+  const [reportStatus, setReportStatus] = useState('');
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const searchParams: any = useSearchParams();
+  const handleReportStatus = useDebouncedCallback((reportStatus: string) => {
+    setReportStatus(reportStatus);
+    const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
+    if (reportStatus) {
+      params.set('reportStatus', reportStatus);
+    } else {
+      params.delete('reportStatus');
+    }
+    replace(`${pathname}?${params.toString()}`);
+    
+  }, 700);
+
+  useEffect(() => {
+    // Ensure the component state is in sync with the URL parameters
+    const currentStatus = searchParams.get('reportStatus') || 'resolved';
+    if (currentStatus !== reportStatus) {
+      setReportStatus(currentStatus);
+    }
+  }, [searchParams, reportStatus]);
+
   return (
     <div className="w-full">
       <Search placeholder="Search reports..." />
+      <select
+        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 pr-3 text-sm outline-2 placeholder:text-gray-500"
+        id="reportStatus"
+        name="reportStatus"
+        value={reportStatus}
+        onChange={(e) => handleReportStatus(e.target.value)}
+        required
+      >
+        <option value="resolved">Resolved</option>
+        <option value="pending">Pending</option>
+      </select>
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
@@ -39,12 +80,30 @@ export default async function ReportsTable({
                         <p className="font-medium">{report.department}</p>
                       </div>
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Description</p>
-                        <p className="font-medium">{report.description}</p>
+                        <p className="text-xs">What</p>
+                        <p className="font-medium">{report.what}</p>
+                      </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between border-b py-5">
+                      <div className="flex w-1/2 flex-col">
+                        <p className="text-xs">When</p>
+                        <p className="font-medium">{report.when}</p>
+                      </div>
+                      <div className="flex w-1/2 flex-col">
+                        <p className="text-xs">Where</p>
+                        <p className="font-medium">{report.where}</p>
                       </div>
                     </div>
                     <div className="pt-4 text-sm font-bold bg-gray-200 border-2 border-black text-gray-900">
                       <p>{formatDateToLocal(report.date)}</p>
+                    </div>
+                    <div className="flex w-full items-center justify-between border-b py-5">
+                      <div className="flex w-1/2 flex-col">
+                        <ReportStatus status={report.status} />
+                      </div>
+                      <div className="flex w-1/2 flex-col">
+                        <ViewReport id={report.id} />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -62,7 +121,13 @@ export default async function ReportsTable({
                       Department
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                      Description
+                      What
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      When
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                      Where
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
                       Status
@@ -88,7 +153,13 @@ export default async function ReportsTable({
                         {report.department}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm max-w-xs">
-                        <div className="truncate">{report.description}</div>
+                        <div className="truncate">{report.what}</div>
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm max-w-xs">
+                        <div className="truncate">{report.when}</div>
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm max-w-xs">
+                        <div className="truncate">{report.where}</div>
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         <ReportStatus status={report.status} />

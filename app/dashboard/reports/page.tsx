@@ -16,14 +16,16 @@ export default async function Page({
 }: {
   searchParams: {
     query: string,
-    page: number
+    page: number,
+    reportStatus: string,
   }
 }) {
   const query = searchParams?.query || '';
+  const reportStatus = searchParams?.reportStatus || 'resolved';
   const currentPage = Number(searchParams?.page) || 1;
   const userData: any = await getUserdata();
-  const totalPages = await fetchReportsPages(userData?.department, query);
-  const reports: any = await fetchFilteredReports(userData?.department, query, currentPage);
+  const totalPages = await fetchReportsPages(userData?.department, query, reportStatus);
+  const reports: any = await fetchFilteredReports(userData?.department, query, currentPage, reportStatus);
 
   return (
     <div className="w-full">

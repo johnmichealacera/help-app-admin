@@ -1,3 +1,5 @@
+"use client"
+
 import { KeyIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { createUser } from '../lib/actions';

@@ -62,21 +62,62 @@ export default function ViewReportForm({
           </div>
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="mb-2 block text-sm font-medium">
-          Description
+          <label htmlFor="what" className="mb-2 block text-sm font-medium">
+          What
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <div className="relative">
                 <textarea
-                  id="description"
-                  name="description"
-                  defaultValue={report.description}
+                  id="what"
+                  name="what"
+                  defaultValue={report.what}
                   disabled
-                  placeholder="Enter contact number"
                   className="block w-full rounded-md border border-gray-200 py-2 px-3 text-sm outline-none placeholder-gray-500 resize-none"
                   rows={5}
-                  aria-describedby="description-error"
+                  aria-describedby="what-error"
+                />
+                <ShieldExclamationIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="when" className="mb-2 block text-sm font-medium">
+          When
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <div className="relative">
+                <textarea
+                  id="when"
+                  name="when"
+                  defaultValue={report.when}
+                  disabled
+                  className="block w-full rounded-md border border-gray-200 py-2 px-3 text-sm outline-none placeholder-gray-500 resize-none"
+                  rows={5}
+                  aria-describedby="when-error"
+                />
+                <ShieldExclamationIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="where" className="mb-2 block text-sm font-medium">
+          Where
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <div className="relative">
+                <textarea
+                  id="where"
+                  name="where"
+                  defaultValue={report.where}
+                  disabled
+                  className="block w-full rounded-md border border-gray-200 py-2 px-3 text-sm outline-none placeholder-gray-500 resize-none"
+                  rows={5}
+                  aria-describedby="where-error"
                 />
                 <ShieldExclamationIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>
